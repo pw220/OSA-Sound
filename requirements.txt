@@ -1,0 +1,12 @@
+torch>=2.2.0
+torchaudio>=2.2.0
+numpy>=1.24.0
+scikit-learn>=1.4.0
+pyyaml>=6.0
+matplotlib>=3.8.0
+pandas>=2.2.0
+
+# Optional: install official pytorch-tabnet implementation if you prefer
+# pytorch-tabnet>=4.1
+
+
