@@ -1,6 +1,7 @@
 ## OSA-Sound: Sleep Apnea Detection from Respiratory Sound
 
-This project implements a binary classifier for apnea events from sleep respiratory sound, following the core ideas of  
+This project implements a binary classifier for apnea events from sleep respiratory sound of the following paper:
+
 **“Deep representation learning with cross attention-based multi-feature fusion for sleep apnea detection using sleep respiratory sound”**[`file://1-s2.0-S1746809425016040-main.pdf`](file://1-s2.0-S1746809425016040-main.pdf).
 
 ### Features
@@ -22,49 +23,6 @@ This project implements a binary classifier for apnea events from sleep respirat
 - `train_classifier.py`: downstream binary classification training utilities (no CLI)
 - `main.py`: simple entry point placeholder you can customize
 
-### Installation
-
-The project targets Python 3.9+ and PyTorch. Install dependencies via:
-
-```bash
-pip install -r requirements.txt
-```
-
-### Usage (Python API)
-
-You are expected to provide your own dataset and DataLoader.  
-Typical usage pattern:
-
-```python
-from torch.utils.data import DataLoader
-
-from osa_sound.data.dataset import ApneaSoundDataset, SampleItem
-from osa_sound.models.wave_encoder import WaveAutoEncoder
-from train_ssl import train_ssl
-
-# 1. Build your own ApneaSoundDataset
-samples = {
-    # key: any string ID
-    # value: SampleItem(waveform=..., acoustic=..., demo=..., label=optional_int)
-}
-dataset = ApneaSoundDataset(samples)
-loader = DataLoader(dataset, batch_size=32, shuffle=True)
-
-# 2. Self-supervised training on waveform
-ssl_model = train_ssl(loader, epochs=10)
-encoder = ssl_model.encoder
-```
-
-For downstream classification, you can create an `OSAClassifierModel` and call `train_classifier`:
-
-```python
-from osa_sound.models.fusion import MultiFeatureFusion
-from train_classifier import OSAClassifierModel, train_classifier
-
-classifier = OSAClassifierModel(dim_enc=256, dim_acoustic=64, dim_demo=8)
-train_loader = DataLoader(dataset, batch_size=32, shuffle=True)
-train_classifier(classifier, train_loader, epochs=10)
-```
 
 ### Citation
 
