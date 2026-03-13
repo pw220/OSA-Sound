@@ -1,6 +1,6 @@
 ## OSA-Sound: Sleep Apnea Detection from Respiratory Sound
 
-This project implements a binary classifier for apnea events from sleep respiratory sound, following the core ideas of  
+This project implements a binary classifier for apnea events from sleep respiratory sound, following the paper： 
 **“Deep representation learning with cross attention-based multi-feature fusion for sleep apnea detection using sleep respiratory sound”**[`file://1-s2.0-S1746809425016040-main.pdf`](file://1-s2.0-S1746809425016040-main.pdf).
 
 ### Features
