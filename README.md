@@ -6,9 +6,8 @@ This project implements a binary classifier for apnea events from sleep respirat
 ### Features
 
 - **Supervised autoencoder for representation learning**
-  - Waveform autoencoder trained with **STFT + log-STFT reconstruction loss** for robust spectral reconstruction, following the paper's definition of $\mathcal{L}_\text{STFT}$ and $\mathcal{L}_\text{logSTFT}$.
-  - A GRU-based head predicts **REM vs. non-REM** sleep stage with binary cross-entropy, forming a **supervised autoencoder** as in the original work.
-  - The final SSL objective is $\mathcal{L}_\text{total} = 0.7 \mathcal{L}_\text{recon} + 0.3 \mathcal{L}_\text{sup}$.
+  - Waveform autoencoder trained with **STFT + log-STFT reconstruction loss** for robust spectral reconstruction.
+  - A GRU-based head predicts **REM vs. non-REM** sleep stage with binary cross-entropy, forming a **supervised autoencoder**.
 - **Hierarchical cross-attention fusion (HCAF)**:
   - Acoustic feature `a`, demographic feature `d`, and latent representation `z` are projected to a shared embedding space and refined via **two-stage cross-attention**:
     1. Acoustic–demographic cross-attention: acoustic as query, demographic as key/value.
@@ -35,45 +34,6 @@ The project targets Python 3.9+ and PyTorch. Install dependencies via:
 
 ```bash
 pip install -r requirements.txt
-```
-
-### Usage (Python API)
-
-You are expected to provide your own dataset and DataLoader.  
-Typical usage pattern:
-
-```python
-from torch.utils.data import DataLoader
-
-from osa_sound.data.dataset import ApneaSoundDataset, SampleItem
-from train_ssl import train_ssl
-
-samples = {
-    "seg_001": SampleItem(
-        waveform=wave_001,          # np.ndarray (T,)
-        acoustic=acoustic_001,      # np.ndarray (D_ac,)
-        demo=demo_patient_x,        # np.ndarray (D_demo,)
-        label=0,                    # apnea label (0/1)
-        stage_label=1,              # REM/non-REM (0: non-REM, 1: REM)
-    ),
-    # ...
-}
-dataset = ApneaSoundDataset(samples)
-loader = DataLoader(dataset, batch_size=32, shuffle=True)
-
-# 2. Self-supervised training on waveform (supervised autoencoder)
-ssl_model = train_ssl(loader, epochs=10, lr=1e-3)
-encoder = ssl_model.encoder  # can be reused for downstream tasks
-```
-
-For downstream classification, you can create an `OSAClassifierModel` and call `train_classifier`:
-
-```python
-from train_classifier import OSAClassifierModel, train_classifier
-
-classifier = OSAClassifierModel(dim_enc=256, dim_acoustic=64, dim_demo=8)
-train_loader = DataLoader(dataset, batch_size=32, shuffle=True)
-train_classifier(classifier, train_loader, epochs=10)
 ```
 
 ### Citation
